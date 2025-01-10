@@ -1,6 +1,9 @@
+
 import logo from './logo.svg';
 import './App.css';
 import FetchCSVData from './wrappers/csvData';
+import '../src/styles/App.css';
+
 
 function App() {
   return (
