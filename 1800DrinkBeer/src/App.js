@@ -1,4 +1,9 @@
+
+import logo from './logo.svg';
+import './App.css';
+import FetchCSVData from './wrappers/csvData';
 import '../src/styles/App.css';
+
 
 function App() {
   return (
@@ -8,6 +13,7 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
+        console.log(parsedCsvData);
         <a
           className="App-link"
           href="https://reactjs.org"
