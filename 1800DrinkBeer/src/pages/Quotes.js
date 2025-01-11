@@ -3,8 +3,9 @@ import Box from '@mui/material/Box';
 import Title from '../components/text/Title';
 import Subtext from '../components/text/Subtext';
 import NameInput from '../components/NameInput';
+import GameOptionsButton from '../components/GameOptionsButton';
 
-const LandingPage = () => {
+const Quotes = () => {
   return (
     <Box
       sx={{
@@ -22,10 +23,13 @@ const LandingPage = () => {
       <Box>
         <Title />
         <Subtext />
+        <GameOptionsButton />
       </Box>
-      <NameInput />
+      <Box>
+        <NameInput />
+      </Box>
     </Box>
   );
 };
 
-export default LandingPage;
+export default Quotes;

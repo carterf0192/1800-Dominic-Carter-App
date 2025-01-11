@@ -9,7 +9,7 @@ const Subtext = () => {
         fontFamily: '"Bebas Neue", sans-serif',
         color: 'text.primary',               
         letterSpacing: 2,                    
-        marginBottom: 10,                       
+        marginBottom: 2,                       
       }}
     >
     The Game Carter and Dominic made to make you drink beer. 
