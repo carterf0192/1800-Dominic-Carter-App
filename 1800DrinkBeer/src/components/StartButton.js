@@ -12,6 +12,7 @@ const StartButton = ({ onClick, show }) => {
         color="primary"
         onClick={onClick}
         sx={{
+         width: '100%',
           fontSize: '24px', 
           fontFamily: '"Bebas Neue", sans-serif',
           padding: '10px 40px', 

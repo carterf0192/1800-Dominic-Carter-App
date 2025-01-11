@@ -4,85 +4,88 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import StartButton from './StartButton';
+import { useNavigate } from 'react-router-dom';
 
 const NameInput = () => {
-  const [names, setNames] = useState([]);
-  const [currentName, setCurrentName] = useState('');
+const [names, setNames] = useState([]);
+const [currentName, setCurrentName] = useState('');
 
-  const handleAddName = () => {
+const handleAddName = () => {
     if (currentName.trim() && names.length < 12) {
-      setNames([...names, currentName.trim()]);
-      setCurrentName('');
+    setNames([...names, currentName.trim()]);
+    setCurrentName('');
     }
-  };
+};
 
-  const handleDeleteName = (nameToDelete) => {
-    setNames(names.filter((name) => name !== nameToDelete));
-  };
+const handleDeleteName = (nameToDelete) => {
+setNames(names.filter((name) => name !== nameToDelete));
+};
 
-  const handleStartGame = () => {
-    alert('Game is starting!'); 
-  };
+const navigate = useNavigate();
+
+const handleStartGame = () => {
+    navigate('/quotesgameplay');
+};
 
   return (
     <Box
-      sx={{
+    sx={{
         position: 'absolute',
-        bottom: '20px',
+        bottom: '8%',
         width: '90%',
         left: '50%',
         transform: 'translateX(-50%)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 2,
-      }}
+        gap: 3,
+    }}
     >
-      <Box
+    <StartButton onClick={handleStartGame} show={names.length >= 2} />
+    <Box
         sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 1,
-          justifyContent: 'center',
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: 1,
+        justifyContent: 'center',
         }}
-      >
-        {names.map((name, index) => (
-          <Chip
+    >
+                {names.map((name, index) => (
+        <Chip
             key={index}
             label={name}
-            color="primary"
+            color="secondary"
             onDelete={() => handleDeleteName(name)}
-          />
+        />
         ))}
-      </Box>
-      <StartButton onClick={handleStartGame} show={names.length >= 4} />
-      <Box sx={{ display: 'flex', gap: 1, width: '100%', justifyContent: 'center' }}>
+    </Box>
+    <Box sx={{ display: 'flex', gap: 1, width: '100%', justifyContent: 'center' }}>
         <TextField
-          id="name-input"
-          placeholder="Enter Name"
-          variant="outlined"
-          value={currentName}
-          onChange={(e) => setCurrentName(e.target.value)}
-          sx={{
+        id="name-input"
+        placeholder="Enter Name"
+        variant="outlined"
+        value={currentName}
+        onChange={(e) => setCurrentName(e.target.value)}
+        sx={{
             flexGrow: 1,
             backgroundColor: 'white',
             borderRadius: 1,
             input: {
-              color: 'black', 
+            color: 'black', 
             },
-          }}
+        }}
         />
         <Button
-          variant="contained"
-          color="primary"
-          onClick={handleAddName}
-          disabled={!currentName.trim() || names.length >= 12}
+        variant="contained"
+        color="primary"
+        onClick={handleAddName}
+        disabled={!currentName.trim() || names.length >= 12}
         >
-          Add
+        Add
         </Button>
-      </Box>
     </Box>
-  );
+    </Box>
+);
 };
 
 export default NameInput;
