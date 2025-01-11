@@ -1,36 +1,33 @@
-import { useEffect, useState } from "react";
-import axios from "axios"; 
+import React, { useState, useEffect } from "react";
+import { Box, Grid, Button, Typography, Paper } from "@mui/material";
+import axios from "axios";
 
-export default function FetchCSVData() {
-    const [csvData, setCsvData] = useState([]);
-    const [usedQuotes, setUsedQuotes] = useState([]);
+export default function QuoteDisplay() {
+    const [selectedQuote, setSelectedQuote] = useState(null);
+    const [options, setOptions] = useState([]);
 
     useEffect(() => {
         fetchCSVData();
-    }, []); 
+    }, []);
 
-    const fetchCSVData = () => {
+    const fetchCSVData = async () => {
         const csvUrl =
-            "https://docs.google.com/spreadsheets/d/e/2PACX-1vR0-x2-4z8hBEFwK6HJok2ymA-oWYNN3CRe1MZiUbPeGZ4Sh5UA6JvHS-E4cSjGYAhnb5CLu20YNPtc/pub?output=csv"; 
-        axios
-            .get(csvUrl) 
-            .then((response) => {
-                const parsedCsvData = parseCSV(response.data); 
-                setCsvData(parsedCsvData); 
-                console.log("Fetched and parsed CSV data:", parsedCsvData);
-                generateQuizQuestion(parsedCsvData); 
-            })
-            .catch((error) => {
-                console.error("Error fetching CSV data:", error);
-            });
+            "https://docs.google.com/spreadsheets/d/e/2PACX-1vR0-x2-4z8hBEFwK6HJok2ymA-oWYNN3CRe1MZiUbPeGZ4Sh5UA6JvHS-E4cSjGYAhnb5CLu20YNPtc/pub?output=csv";
+        try {
+            const response = await axios.get(csvUrl);
+            const data = parseCSV(response.data);
+            generateQuizQuestion(data);
+        } catch (error) {
+            console.error("Error fetching CSV data:", error);
+        }
     };
 
-    function parseCSV(csvText) {
-        const rows = csvText.split(/\r?\n/); 
+    const parseCSV = (csvText) => {
+        const rows = csvText.split(/\r?\n/);
         const headers = rows[0].split(",");
-        const data = []; 
+        const data = [];
         for (let i = 1; i < rows.length; i++) {
-            const rowData = rows[i].split(","); 
+            const rowData = rows[i].split(",");
             const rowObject = {};
             for (let j = 0; j < headers.length; j++) {
                 rowObject[headers[j]] = rowData[j];
@@ -38,27 +35,13 @@ export default function FetchCSVData() {
             data.push(rowObject);
         }
         return data;
-    }
+    };
 
-    function generateQuizQuestion(data) {
-        if (data.length === 0) return console.log("No data available for quiz.");
+    const generateQuizQuestion = (data) => {
+        if (data.length === 0) return;
 
-        const unusedQuotes = data.filter((_, index) => !usedQuotes.includes(index));
-
-        if (unusedQuotes.length === 0) {
-            setUsedQuotes([]);
-            console.log("All quotes used. Resetting tracker.");
-            return generateQuizQuestion(data);
-        }
-
-        const randomIndex = Math.floor(Math.random() * unusedQuotes.length);
-        const selectedQuoteIndex = data.indexOf(unusedQuotes[randomIndex]);
-        const selectedQuote = data[selectedQuoteIndex];
-        setUsedQuotes((prev) => {
-            const updatedQuotes = [...prev, selectedQuoteIndex];
-            console.log("Used quotes indices:", updatedQuotes);
-            return updatedQuotes;
-        });
+        const randomIndex = Math.floor(Math.random() * data.length);
+        const selectedQuote = data[randomIndex];
 
         const correctAnswer = selectedQuote["Who Said It"];
         const allNames = data.map((item) => item["Who Said It"]);
@@ -67,10 +50,52 @@ export default function FetchCSVData() {
         const selectedIncorrectNames = shuffledIncorrectNames.slice(0, 3);
         const options = [...selectedIncorrectNames, correctAnswer].sort(() => 0.5 - Math.random());
 
-        console.log("Quote:", selectedQuote.Quote);
-        console.log("Options:", options);
-        console.log("Correct Answer:", correctAnswer);
-    }
+        setSelectedQuote(selectedQuote);
+        setOptions(options);
+    };
 
-    return null; 
+    if (!selectedQuote) return null;
+
+    return (
+        <Box sx={{ padding: 4 }}>
+            <Box elevation={3} 
+                           sx={{
+                            width: "90%",
+                            height: "30vh",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "#f5f5f5",
+                            boxShadow: 3,
+                            padding: 1,
+                            borderRadius: 2,
+                            margin: "60px auto",
+                            mb: 4,
+                            border: "1px solid #ddd",
+                        }}>
+                <Typography variant="h4" align="center" sx={{color:'black'}}>
+                    {selectedQuote.Quote}
+                </Typography>
+            </Box>
+            <Grid container spacing={5}>
+                {options.map((option, index) => (
+                    <Grid item xs={6} key={index}>
+                        <Button
+                            variant="contained"
+                            fullWidth
+                            sx={{
+
+                              height: '100px', 
+                              fontSize: '35px',//TODO: Change font size
+                              fontFamily: '"Bebas Neue", sans-serif', 
+                            }}
+                            onClick={() => console.log("Selected Option:", option)}
+                        >
+                            {option}
+                        </Button>
+                    </Grid>
+                ))}
+            </Grid>
+        </Box>
+    );
 }
