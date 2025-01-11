@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Quotes from './pages/Quotes';
 import GameSelect from './pages/GameSelect';
-import QuotesGameplay from './pages/QuotesGameplay';
 import GameOptions from './pages/GameOptions'; 
 import FetchCSVData from './wrappers/csvData';
+import QuotesGameplay from './pages/QuotesGameplay';
 
 function App() {
   const csvData = FetchCSVData();
